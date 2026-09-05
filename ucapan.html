@@ -102,6 +102,54 @@ h1 { font-family: 'Baloo 2', sans-serif; }
 @media (max-width: 420px) {
   .gallery { grid-template-columns: 1fr 1fr; gap: 16px 14px; }
 }
+  /* Music control button */
+.music-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 5;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: var(--pink-hot);
+  color: var(--white);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 24px var(--shadow);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+.music-btn:hover { background: #ff3f90; }
+.music-btn:active { transform: scale(0.94); }
+.music-btn.paused { animation: none; }
+.music-btn:not(.paused) { animation: pulse-btn 1.6s ease-in-out infinite; }
+
+@keyframes pulse-btn {
+  0%, 100% { box-shadow: 0 10px 24px var(--shadow); }
+  50% { box-shadow: 0 10px 24px var(--shadow), 0 0 0 8px rgba(255, 95, 162, 0.15); }
+}
+
+.music-hint {
+  position: fixed;
+  bottom: 78px;
+  right: 20px;
+  z-index: 5;
+  background: var(--white);
+  color: var(--berry-dark);
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  box-shadow: 0 8px 18px var(--shadow);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+.music-hint.show { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
@@ -159,6 +207,11 @@ h1 { font-family: 'Baloo 2', sans-serif; }
 </main>
 
 <canvas id="confetti"></canvas>
+
+  <!-- Ganti "musik.mp3" dengan nama file lagu kamu -->
+<audio id="bgm" src="musik.mp3" loop preload="auto"></audio>
+<button class="music-btn paused" id="musicBtn" aria-label="Putar atau jeda musik">🔇</button>
+<span class="music-hint" id="musicHint">Ketuk untuk putar musik 🎵</span>
 
 <script>
 // Floating hearts
@@ -228,6 +281,43 @@ h1 { font-family: 'Baloo 2', sans-serif; }
     else ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
   requestAnimationFrame(draw);
+})();
+  // Background music: try autoplay, fall back to tap-to-play
+(function bgMusic() {
+  const bgm = document.getElementById('bgm');
+  const btn = document.getElementById('musicBtn');
+  const hint = document.getElementById('musicHint');
+
+  function setPlayingUI() {
+    btn.textContent = '🔊';
+    btn.classList.remove('paused');
+    hint.classList.remove('show');
+  }
+  function setPausedUI() {
+    btn.textContent = '🔇';
+    btn.classList.add('paused');
+  }
+
+  bgm.volume = 0.6;
+
+  const playPromise = bgm.play();
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => setPlayingUI())
+      .catch(() => {
+        setPausedUI();
+        setTimeout(() => hint.classList.add('show'), 500);
+      });
+  }
+
+  btn.addEventListener('click', () => {
+    if (bgm.paused) {
+      bgm.play().then(setPlayingUI).catch(() => {});
+    } else {
+      bgm.pause();
+      setPausedUI();
+    }
+  });
 })();
 </script>
 </body>
