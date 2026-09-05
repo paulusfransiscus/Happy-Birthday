@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kejutan untuk Bibi 💗</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap');
+
+:root {
+  --pink-bg: #ffeaf3;
+  --pink-mid: #ffb6d9;
+  --pink-hot: #ff5fa2;
+  --berry-dark: #7a2350;
+  --gold: #ffc94d;
+  --white: #ffffff;
+  --shadow: rgba(122, 35, 80, 0.18);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Quicksand', sans-serif;
+  color: var(--berry-dark);
+  background: var(--pink-bg);
+  overflow-x: hidden;
+}
+
+h1 { font-family: 'Baloo 2', sans-serif; }
+
+button {
+  font-family: 'Quicksand', sans-serif;
+  cursor: pointer;
+  border: none;
+}
+
+button:focus-visible { outline: 3px solid var(--berry-dark); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Floating hearts */
+.floating-hearts { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.floating-hearts span {
+  position: absolute; bottom: -10%; font-size: 1.4rem; opacity: 0.35;
+  animation: drift-up linear infinite; color: var(--pink-hot);
+}
+@keyframes drift-up {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.35; }
+  90% { opacity: 0.35; }
+  100% { transform: translateY(-115vh) translateX(20px) rotate(25deg); opacity: 0; }
+}
+
+/* Scan page layout */
+.scan-wrap {
+  position: relative; z-index: 1; min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 32px 20px 56px;
+}
+.eyebrow { margin: 0 0 4px; font-size: 0.95rem; font-weight: 600; color: var(--pink-hot); }
+.scan-title { margin: 0 0 8px; font-size: clamp(1.9rem, 6vw, 2.6rem); font-weight: 700; }
+.scan-sub { margin: 0 0 32px; max-width: 320px; font-size: 1rem; line-height: 1.5; color: #a8577f; }
+
+.device {
+  position: relative; width: min(280px, 84vw); background: var(--white);
+  border-radius: 32px; padding: 20px 20px 26px; box-shadow: 0 20px 45px var(--shadow);
+  border: 3px solid var(--pink-mid);
+}
+.device-notch { width: 56px; height: 6px; border-radius: 4px; background: var(--pink-mid); margin: 0 auto 18px; }
+
+.scan-area {
+  position: relative; width: 100%; aspect-ratio: 1 / 1; border-radius: 20px;
+  background: linear-gradient(180deg, #fff7fb, #ffeaf3);
+  display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 18px;
+}
+.scan-area svg { width: 70%; height: 70%; }
+
+.scan-line {
+  position: absolute; left: 8%; right: 8%; top: 15%; height: 3px; border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--pink-hot), transparent);
+  box-shadow: 0 0 12px 2px rgba(255, 95, 162, 0.6); opacity: 0;
+}
+.scan-line.active { opacity: 1; animation: sweep 1.4s ease-in-out infinite; }
+@keyframes sweep { 0% { top: 12%; } 50% { top: 78%; } 100% { top: 12%; } }
+
+.scan-btn {
+  width: 100%; padding: 14px 20px; border-radius: 999px; background: var(--pink-hot);
+  color: var(--white); font-size: 1.05rem; font-weight: 600; letter-spacing: 0.2px;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+.scan-btn:hover { background: #ff3f90; }
+.scan-btn:active { transform: scale(0.97); }
+.scan-btn:disabled { background: var(--pink-mid); cursor: default; transform: none; }
+
+.progress-track {
+  margin-top: 16px; width: 100%; height: 10px; background: var(--pink-bg);
+  border-radius: 999px; overflow: hidden; border: 1px solid var(--pink-mid);
+}
+.progress-fill {
+  height: 100%; width: 0%; background: linear-gradient(90deg, var(--pink-hot), var(--gold));
+  border-radius: 999px; transition: width 0.12s linear;
+}
+.scan-status { margin: 12px 0 0; font-size: 0.9rem; color: #a8577f; min-height: 1.2em; }
+</style>
+</head>
+<body>
+
+<div class="floating-hearts" id="hearts"></div>
+
+<main class="scan-wrap">
+  <p class="eyebrow">Sebelum lanjut...</p>
+  <h1 class="scan-title">Pindai dulu, yuk!</h1>
+  <p class="scan-sub">Ada kejutan kecil yang lagi disiapkan khusus untuk Antee</p>
+
+  <div class="device">
+    <div class="device-notch"></div>
+    <div class="scan-area">
+      <svg id="qr" viewBox="0 0 120 120" width="180" height="180" aria-hidden="true">
+        <rect x="0" y="0" width="120" height="120" fill="#fff" rx="8"/>
+        <g fill="#7a2350">
+          <rect x="6" y="6" width="28" height="28" rx="4"/>
+          <rect x="86" y="6" width="28" height="28" rx="4"/>
+          <rect x="6" y="86" width="28" height="28" rx="4"/>
+        </g>
+        <g fill="#fff">
+          <rect x="12" y="12" width="16" height="16" rx="2"/>
+          <rect x="92" y="12" width="16" height="16" rx="2"/>
+          <rect x="12" y="92" width="16" height="16" rx="2"/>
+        </g>
+        <g fill="#ff5fa2">
+          <rect x="17" y="17" width="6" height="6"/>
+          <rect x="97" y="17" width="6" height="6"/>
+          <rect x="17" y="97" width="6" height="6"/>
+        </g>
+        <g fill="#7a2350" id="qrBlocks"></g>
+      </svg>
+      <div class="scan-line" id="scanLine"></div>
+    </div>
+
+    <button class="scan-btn" id="scanBtn">Ketuk untuk scan</button>
+    <div class="progress-track" id="progressTrack" hidden>
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <p class="scan-status" id="scanStatus" aria-live="polite">Menunggu diketuk...</p>
+  </div>
+</main>
+
+<script>
+// Floating hearts
+(function spawnHearts() {
+  const container = document.getElementById('hearts');
+  const symbols = ['💗', '💕', '✨'];
+  for (let i = 0; i < 14; i++) {
+    const el = document.createElement('span');
+    el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.fontSize = 1 + Math.random() * 1.2 + 'rem';
+    const duration = 10 + Math.random() * 10;
+    el.style.animationDuration = duration + 's';
+    el.style.animationDelay = Math.random() * duration + 's';
+    container.appendChild(el);
+  }
+})();
+
+// QR decorative blocks
+(function drawQrBlocks() {
+  const g = document.getElementById('qrBlocks');
+  const size = 6, cols = 14, rows = 14;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if ((r < 6 && c < 6) || (r < 6 && c > cols - 7) || (r > rows - 7 && c < 6)) continue;
+      if (Math.random() > 0.62) {
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', c * size);
+        rect.setAttribute('y', r * size);
+        rect.setAttribute('width', size - 1);
+        rect.setAttribute('height', size - 1);
+        rect.setAttribute('rx', 1);
+        g.appendChild(rect);
+      }
+    }
+  }
+})();
+
+// Scan flow -> redirect to ucapan.html
+const scanBtn = document.getElementById('scanBtn');
+const scanLine = document.getElementById('scanLine');
+const progressTrack = document.getElementById('progressTrack');
+const progressFill = document.getElementById('progressFill');
+const scanStatus = document.getElementById('scanStatus');
+
+scanBtn.addEventListener('click', () => {
+  scanBtn.disabled = true;
+  scanBtn.textContent = 'Memindai...';
+  scanLine.classList.add('active');
+  progressTrack.hidden = false;
+  scanStatus.textContent = 'Sedang memindai kode...';
+
+  let progress = 0;
+  const messages = [
+    'Sedang memindai kode...',
+    'Mengumpulkan kejutan...',
+    'Menambahkan taburan cinta...',
+    'Hampir selesai...'
+  ];
+
+  const interval = setInterval(() => {
+    progress += Math.random() * 12 + 6;
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(interval);
+      scanStatus.textContent = 'Selesai! Membuka kejutan...';
+      setTimeout(() => { window.location.href = 'ucapan.html'; }, 600);
+    } else {
+      const stepIndex = Math.min(messages.length - 1, Math.floor((progress / 100) * messages.length));
+      scanStatus.textContent = messages[stepIndex];
+    }
+    progressFill.style.width = progress + '%';
+  }, 220);
+});
+</script>
+</body>
+</html>
